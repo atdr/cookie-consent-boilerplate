@@ -1,0 +1,90 @@
+<html>
+    <head>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            
+            // Set default consent for ad and analytics storage.
+            gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'wait_for_update': 500  // milliseconds
+            });
+            
+            // Now load GA
+            gtag('js', new Date());
+            gtag('config', 'GA_MEASUREMENT_ID');
+        </script>
+
+        <!-- load Osano CSS-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+        <style>
+            .cc-revoke, .cc-window {
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+            }
+        </style>
+
+    </head>
+    <body>
+
+        <h1>Cookie Consent and Google Analytics</h1>
+        <p>Implementing <a href="https://www.osano.com/cookieconsent">Osano Cookie Consent</a> and <a href="https://developers.google.com/gtagjs/devguide/consent">Google Consent Mode</a> for <code>gtag.js</code></p>
+
+        <!-- load Osano -->
+        <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+        <!-- adjust Osano settings -->
+        <!-- https://www.osano.com/cookieconsent/documentation/javascript-api/ -->
+        <script>
+            window.cookieconsent.initialise({
+                palette: {
+                    popup: {
+                        background: "#ebeeee",
+                        text: "#161515"
+                    },
+                    button: {
+                        background: "#003e74",
+                        text: "#fff"
+                    }
+                },
+                type: "opt-in",
+                law: "GB",
+                revokable: "true",
+                // https://www.osano.com/cookieconsent/documentation/disabling-cookies/
+                onInitialise: function (status) {
+                    var type = this.options.type;
+                    var didConsent = this.hasConsented();
+                    // console.log(didConsent ? 'enable cookies' : 'disable cookies');
+                    if (type == 'opt-in' && didConsent) {
+                        gtag('consent', 'update', {'analytics_storage': 'granted'});
+                    }
+                    if (type == 'opt-out' && !didConsent) {
+                        gtag('consent', 'update', {'analytics_storage': 'denied'});
+                    }
+                },
+                onStatusChange: function(status) {
+                    var type = this.options.type;
+                    var didConsent = this.hasConsented();
+                    // console.log(didConsent ? 'enable cookies' : 'disable cookies');
+                    if (type == 'opt-in' && didConsent) {
+                        gtag('consent', 'update', {'analytics_storage': 'granted'});
+                    }
+                    if (type == 'opt-out' && !didConsent) {
+                        gtag('consent', 'update', {'analytics_storage': 'denied'});
+                    }
+                },
+                onRevokeChoice: function() {
+                    var type = this.options.type;
+                    if (type == 'opt-in') {
+                        gtag('consent', 'update', {'analytics_storage': 'denied'});
+                    }
+                    if (type == 'opt-out') {
+                        gtag('consent', 'update', {'analytics_storage': 'granted'});
+                    }
+                }
+            });
+            </script>
+    </body>
+</html>
