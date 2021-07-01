@@ -13,6 +13,10 @@
                 'analytics_storage': 'denied',
                 'wait_for_update': 500  // milliseconds
             });
+
+            // Prevent analytics data from being used for ads personalisation
+            // https://developers.google.com/analytics/devguides/collection/ga4/display-features#disable_advertising_personalization
+            gtag('set', 'allow_ad_personalization_signals', false);
             
             // Now load GA
             gtag('js', new Date());
